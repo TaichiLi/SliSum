@@ -166,27 +166,3 @@ def aggregate_summaries(filtered_sentences, pipe, prompt):
     final_summary = "\n".join(filtered_sentences)
     result = pipe(prompt + "\n" + final_summary, max_length=500, truncation=True)
     return result[0]['generated_text']
-
-# def main():
-#     parser = argparse.ArgumentParser(description="SliSum")
-#     parser.add_argument('--model', type=str, required=True, help="Model ID for text generation.")
-#     parser.add_argument('--dataset', type=str, default="ccdv/pubmed-summarization", help="Dataset name.")
-#     parser.add_argument('--max_segment_length', type=int, default=150, help="Max length of each segment.")
-#     parser.add_argument('--sliding_window_size', type=int, default=50, help="Sliding window size.")
-#     args = parser.parse_args()
-
-#     pipe = pipeline("text-generation", model=args.model, device=0)
-#     dataset = load_dataset(args.dataset, split="test[:1%]")
-#     article = dataset[0]['article']
-
-#     segments = segment_article(article, args.max_segment_length, args.sliding_window_size)
-#     local_summaries = sliding_generation(segments, pipe, "Summarize the following segment:")
-#     distances, sentences = calculate_distances(local_summaries)
-#     filtered_sentences = filter_sentences(distances, sentences)
-#     final_summary = aggregate_summaries(filtered_sentences, pipe, "Combine the following sentences into a coherent summary:")
-
-#     print("Final Summary:")
-#     print(final_summary)
-
-# if __name__ == "__main__":
-#     main()
