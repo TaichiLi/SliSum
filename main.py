@@ -2,7 +2,7 @@ import argparse
 from datasets import load_dataset
 from transformers import pipeline
 import random
-from slisum import process_sentences
+from slisum import segment_article, sliding_generation, calculate_distances, filter_sentences, aggregate_summaries
 from rouge_score import rouge_scorer
 from bert_score import score as bertscore
 import json
@@ -59,7 +59,11 @@ def generate_summary_for_articles(dataset_name, model_name, window_size, step_si
 
     for article, ref_summary in zip(tqdm(selected_articles), selected_summaries):
         # Process each article and generate its summary
-        generated_summary = process_sentences(article, pipe, window_size, step_size, distance_threshold, min_samples)
+        segments = segment_article(article, args.max_segment_length, args.sliding_window_size)
+        local_summaries = sliding_generation(segments, pipe, "Summarize the following segment:")
+        distances, sentences = calculate_distances(local_summaries)
+        filtered_sentences = filter_sentences(distances, sentences)
+        generated_summary = aggregate_summaries(filtered_sentences, pipe, "Combine the following sentences into a coherent summary:")
         
         # Evaluate ROUGE scores
         rouge_scores = compute_rouge_scores(generated_summary, ref_summary, rouge_scorer_instance)

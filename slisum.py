@@ -92,6 +92,7 @@ def calculate_distances(summaries):
     np.ndarray: A distance matrix for clustering.
     """
     sentences = [remove_stopwords(sent.strip()) for summary in summaries for sent in sent_tokenize(summary)]
+    summary_sentences = [sent.strip() for summary in summaries for sent in sent_tokenize(summary)]
     scorer = rouge_scorer.RougeScorer(['rouge1'], use_stemmer=True)
     distances = np.zeros((len(sentences), len(sentences)))
 
@@ -101,7 +102,7 @@ def calculate_distances(summaries):
             rouge1_f1 = score['rouge1'].fmeasure
             distances[i, j] = distances[j, i] = 1 - rouge1_f1
 
-    return distances, sentences
+    return distances, summary_sentences
 
 def select_representative_sentence(cluster_sentences):
     """
