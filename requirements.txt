@@ -1,5 +1,6 @@
 rouge-score
 bert-score
+summac
 transformers
 scikit-learn
 datasets

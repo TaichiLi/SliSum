@@ -1,6 +1,7 @@
 from rouge_score import rouge_scorer
 from itertools import combinations
 
+
 def calculate_rouge1_f1(sent1, sent2):
     """
     Compute the ROUGE-1 F1 score between two sentences.
@@ -8,9 +9,10 @@ def calculate_rouge1_f1(sent1, sent2):
     :param sent2: The second sentence (string)
     :return: ROUGE-1 F1 score (float)
     """
-    scorer = rouge_scorer.RougeScorer(['rouge1'], use_stemmer=True)
+    scorer = rouge_scorer.RougeScorer(["rouge1"], use_stemmer=True)
     scores = scorer.score(sent1, sent2)
-    return scores['rouge1'].fmeasure  # Extract the F1 score
+    return scores["rouge1"].fmeasure  # Extract the F1 score
+
 
 def calculate_sentence_distance(sent1, sent2):
     """
@@ -22,13 +24,18 @@ def calculate_sentence_distance(sent1, sent2):
     rouge1_f1 = calculate_rouge1_f1(sent1, sent2)
     return 1 - rouge1_f1
 
+
 def maximum_distance(cluster):
     """
     Compute the maximum distance between any two sentences of a cluster.
     :param cluster: The sentence cluster (list of sentences)
     :return: the maximum distance of any two sentences of a cluster (float)
     """
-    max(calculate_sentence_distance(sent1, sent2) for sent1, sent2 in combinations(cluster, 2))
+    max(
+        calculate_sentence_distance(sent1, sent2)
+        for sent1, sent2 in combinations(cluster, 2)
+    )
+
 
 def average_distance(cluster):
     """
@@ -42,8 +49,9 @@ def average_distance(cluster):
     for sent1, sent2 in combinations(cluster, 2):
         total_distance += calculate_sentence_distance(sent1, sent2)
         pair_count += 1
-    
-    return total_distance / pair_count
+
+    return total_distance / pair_count if pair_count > 0 else 0
+
 
 def hausdorff_distance(cluster1, cluster2):
     """
@@ -57,15 +65,16 @@ def hausdorff_distance(cluster1, cluster2):
         min(calculate_sentence_distance(sent1, sent2) for sent2 in cluster2)
         for sent1 in cluster1
     )
-    
+
     # Calculate the infimum distances from cluster2 to cluster1
     inf_dist2 = max(
         min(calculate_sentence_distance(sent2, sent1) for sent1 in cluster1)
         for sent2 in cluster2
     )
-    
+
     # The Hausdorff distance is the maximum of the two distances
     return max(inf_dist1, inf_dist2)
+
 
 def average_hausdorff_distance(clusters):
     """
@@ -82,6 +91,6 @@ def average_hausdorff_distance(clusters):
         for j in range(i + 1, n):
             total_distance += hausdorff_distance(clusters[i], clusters[j])
             pair_count += 1
-    
+
     # Compute the average distance
     return total_distance / pair_count if pair_count > 0 else 0
