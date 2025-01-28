@@ -1,4 +1,5 @@
 from rouge_score import rouge_scorer
+from itertools import combinations
 
 def calculate_rouge1_f1(sent1, sent2):
     """
@@ -20,6 +21,29 @@ def calculate_sentence_distance(sent1, sent2):
     """
     rouge1_f1 = calculate_rouge1_f1(sent1, sent2)
     return 1 - rouge1_f1
+
+def maximum_distance(cluster):
+    """
+    Compute the maximum distance between any two sentences of a cluster.
+    :param cluster: The sentence cluster (list of sentences)
+    :return: the maximum distance of any two sentences of a cluster (float)
+    """
+    max(calculate_sentence_distance(sent1, sent2) for sent1, sent2 in combinations(cluster, 2))
+
+def average_distance(cluster):
+    """
+    Compute the average distance of all sentence pairs of a cluster.
+    :param cluster: The sentence cluster (list of sentences)
+    :return: the average distance of all sentence pairs of a cluster (float)
+    """
+    total_distance = 0
+    pair_count = 0
+
+    for sent1, sent2 in combinations(cluster, 2):
+        total_distance += calculate_sentence_distance(sent1, sent2)
+        pair_count += 1
+    
+    return total_distance / pair_count
 
 def hausdorff_distance(cluster1, cluster2):
     """
