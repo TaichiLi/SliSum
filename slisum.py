@@ -1,13 +1,9 @@
-import argparse
 from datasets import load_dataset
 from transformers import pipeline
-import torch
 import numpy as np
 from sklearn.cluster import DBSCAN, MeanShift
 from collections import Counter
 from rouge_score import rouge_scorer
-import evaluate
-import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from sentence_transformers import SentenceTransformer

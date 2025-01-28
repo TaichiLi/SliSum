@@ -1,0 +1,8 @@
+rouge-score
+bert-score
+transformers
+scikit-learn
+datasets
+tqam
+nltk
+sentence-transformers
