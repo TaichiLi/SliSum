@@ -1,6 +1,6 @@
-# SliSum: An LLM-ased Faithful Summary Generation Framework
+# SliSum: An LLM-based Faithful Summary Generation Framework
 
-This is an implementation of LREC-COLING 2024 paper [Improving Faithfulness of Large Language Models in Summarization via Sliding Generation and Self-Consistency](https://aclanthology.org/2024.lrec-main.771/).
+This is an implementation of LREC-COLING 2024 paper *[Improving Faithfulness of Large Language Models in Summarization via Sliding Generation and Self-Consistency](https://aclanthology.org/2024.lrec-main.771/)*.
 
 ## Overview
 
